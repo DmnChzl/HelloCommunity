@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './interfaces/user.interface';
@@ -24,12 +25,15 @@ export class UsersService {
     throw new HttpException('No User Found', HttpStatus.NOT_FOUND);
   }
 
-  create(createUserDto: CreateUserDto): { createdId: string } {
+  async create({ password, ...createUserDto }: CreateUserDto): Promise<{ createdId: string }> {
     const uuid = generateUuid();
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(password, salt);
     this.users = [
       ...this.users,
       {
         id: uuid,
+        password: hash,
         ...createUserDto
       }
     ];

@@ -1,6 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
+import * as bcrypt from 'bcrypt';
 import { Gender } from './enums/gender.enum';
+import { UsersService } from './users.service';
+
+jest.mock('bcrypt');
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -65,7 +68,13 @@ describe('UsersService', () => {
     expect(findOneByEmailSpy).toHaveBeenCalledWith('mrdoomy@mrdoomy.xyz');
   });
 
-  it('create', () => {
+  it('create', async () => {
+    const genSaltMock = jest.fn().mockReturnValue(10);
+    (bcrypt.genSalt as jest.Mock) = genSaltMock;
+
+    const hashMock = jest.fn().mockReturnValue('qwerty');
+    (bcrypt.hash as jest.Mock) = hashMock;
+
     const createSpy = jest.spyOn(service, 'create');
     const data = {
       email: 'mrdoomy@mrdoomy.xyz',
@@ -74,7 +83,7 @@ describe('UsersService', () => {
       lastName: 'Chazoule',
       gender: Gender.Male
     };
-    service.create(data);
+    await service.create(data);
     expect(createSpy).toHaveBeenCalledWith(data);
   });
 

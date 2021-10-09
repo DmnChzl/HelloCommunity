@@ -51,14 +51,14 @@ describe('UsersController', () => {
     expect(controller.findOne('abc123')).toEqual(result);
   });
 
-  it('create', () => {
+  it('create', async () => {
     const result = {
       createdId: 'abc123'
     };
 
-    jest.spyOn(service, 'create').mockReturnValue(result);
+    jest.spyOn(service, 'create').mockResolvedValue(result);
     expect(
-      controller.create({
+      await controller.create({
         email: 'mrdoomy@mrdoomy.xyz',
         password: 'azerty',
         firstName: 'Damien',
