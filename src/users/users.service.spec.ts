@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as bcrypt from 'bcrypt';
+import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.service';
 import { Gender } from './enums/gender.enum';
 import { UsersService } from './users.service';
 
@@ -7,21 +9,24 @@ jest.mock('bcrypt');
 
 describe('UsersService', () => {
   let service: UsersService;
+  let prisma: PrismaService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [PrismaModule],
       providers: [UsersService]
     }).compile();
 
     service = module.get<UsersService>(UsersService);
+    prisma = module.get<PrismaService>(PrismaService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('findAll', () => {
-    service.users = [
+  it('findAll', async () => {
+    jest.spyOn(prisma.user, 'findMany').mockResolvedValue([
       {
         id: 'abc123',
         email: 'mrdoomy@mrdoomy.xyz',
@@ -30,45 +35,50 @@ describe('UsersService', () => {
         lastName: 'Chazoule',
         gender: Gender.Male
       }
-    ];
+    ]);
     const findAllSpy = jest.spyOn(service, 'findAll');
-    service.findAll();
+    await service.findAll();
     expect(findAllSpy).toHaveBeenCalled();
   });
 
-  it('findOne', () => {
-    service.users = [
-      {
-        id: 'abc123',
-        email: 'mrdoomy@mrdoomy.xyz',
-        password: 'azerty',
-        firstName: 'Damien',
-        lastName: 'Chazoule',
-        gender: Gender.Male
-      }
-    ];
+  it('findOne', async () => {
+    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
+      id: 'abc123',
+      email: 'mrdoomy@mrdoomy.xyz',
+      password: 'azerty',
+      firstName: 'Damien',
+      lastName: 'Chazoule',
+      gender: Gender.Male
+    });
     const findOneSpy = jest.spyOn(service, 'findOne');
-    service.findOne('abc123');
+    await service.findOne('abc123');
     expect(findOneSpy).toHaveBeenCalledWith('abc123');
   });
 
-  it('findOneByEmail', () => {
-    service.users = [
-      {
-        id: 'abc123',
-        email: 'mrdoomy@mrdoomy.xyz',
-        password: 'azerty',
-        firstName: 'Damien',
-        lastName: 'Chazoule',
-        gender: Gender.Male
-      }
-    ];
+  it('findOneByEmail', async () => {
+    jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
+      id: 'abc123',
+      email: 'mrdoomy@mrdoomy.xyz',
+      password: 'azerty',
+      firstName: 'Damien',
+      lastName: 'Chazoule',
+      gender: Gender.Male
+    });
     const findOneByEmailSpy = jest.spyOn(service, 'findOneByEmail');
-    service.findOneByEmail('mrdoomy@mrdoomy.xyz');
+    await service.findOneByEmail('mrdoomy@mrdoomy.xyz');
     expect(findOneByEmailSpy).toHaveBeenCalledWith('mrdoomy@mrdoomy.xyz');
   });
 
   it('create', async () => {
+    jest.spyOn(prisma.user, 'create').mockResolvedValue({
+      id: 'abc123',
+      email: 'mrdoomy@mrdoomy.xyz',
+      password: 'qwerty',
+      firstName: 'Damien',
+      lastName: 'Chazoule',
+      gender: Gender.Male
+    });
+
     const genSaltMock = jest.fn().mockReturnValue(10);
     (bcrypt.genSalt as jest.Mock) = genSaltMock;
 
@@ -87,38 +97,34 @@ describe('UsersService', () => {
     expect(createSpy).toHaveBeenCalledWith(data);
   });
 
-  it('update', () => {
-    service.users = [
-      {
-        id: 'abc123',
-        email: 'mrdoomy@mrdoomy.xyz',
-        password: 'azerty',
-        firstName: 'Damien',
-        lastName: 'Chazoule',
-        gender: Gender.Male
-      }
-    ];
+  it('update', async () => {
+    jest.spyOn(prisma.user, 'update').mockResolvedValue({
+      id: 'abc123',
+      email: 'mrdoomy@mrdoomy.xyz',
+      password: 'azerty',
+      firstName: 'Damien',
+      lastName: 'Chazoule',
+      gender: Gender.Female
+    });
     const updateSpy = jest.spyOn(service, 'update');
     const data = {
       gender: Gender.Female
     };
-    service.update('abc123', data);
+    await service.update('abc123', data);
     expect(updateSpy).toHaveBeenCalledWith('abc123', data);
   });
 
-  it('remove', () => {
-    service.users = [
-      {
-        id: 'abc123',
-        email: 'mrdoomy@mrdoomy.xyz',
-        password: 'azerty',
-        firstName: 'Damien',
-        lastName: 'Chazoule',
-        gender: Gender.Female
-      }
-    ];
+  it('remove', async () => {
+    jest.spyOn(prisma.user, 'delete').mockResolvedValue({
+      id: 'abc123',
+      email: 'mrdoomy@mrdoomy.xyz',
+      password: 'azerty',
+      firstName: 'Damien',
+      lastName: 'Chazoule',
+      gender: Gender.Female
+    });
     const removeSpy = jest.spyOn(service, 'remove');
-    service.remove('abc123');
+    await service.remove('abc123');
     expect(removeSpy).toHaveBeenCalledWith('abc123');
   });
 });

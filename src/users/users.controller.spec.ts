@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaModule } from '../prisma/prisma.module';
 import { Gender } from './enums/gender.enum';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -9,6 +10,7 @@ describe('UsersController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [PrismaModule],
       controllers: [UsersController],
       providers: [UsersService]
     }).compile();
@@ -21,7 +23,7 @@ describe('UsersController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('findAll', () => {
+  it('findAll', async () => {
     const result = [
       {
         id: 'abc123',
@@ -33,11 +35,11 @@ describe('UsersController', () => {
       }
     ];
 
-    jest.spyOn(service, 'findAll').mockReturnValue(result);
-    expect(controller.findAll()).toEqual(result);
+    jest.spyOn(service, 'findAll').mockResolvedValue(result);
+    expect(await controller.findAll()).toEqual(result);
   });
 
-  it('findOne', () => {
+  it('findOne', async () => {
     const result = {
       id: 'abc123',
       email: 'mrdoomy@mrdoomy.xyz',
@@ -47,8 +49,8 @@ describe('UsersController', () => {
       gender: Gender.Male
     };
 
-    jest.spyOn(service, 'findOne').mockReturnValue(result);
-    expect(controller.findOne('abc123')).toEqual(result);
+    jest.spyOn(service, 'findOne').mockResolvedValue(result);
+    expect(await controller.findOne('abc123')).toEqual(result);
   });
 
   it('create', async () => {
@@ -68,21 +70,21 @@ describe('UsersController', () => {
     ).toEqual(result);
   });
 
-  it('update', () => {
+  it('update', async () => {
     const result = {
       updatedId: 'abc123'
     };
 
-    jest.spyOn(service, 'update').mockReturnValue(result);
-    expect(controller.update('abc123', { gender: Gender.Female })).toEqual(result);
+    jest.spyOn(service, 'update').mockResolvedValue(result);
+    expect(await controller.update('abc123', { gender: Gender.Female })).toEqual(result);
   });
 
-  it('remove', () => {
+  it('remove', async () => {
     const result = {
       removedId: 'abc123'
     };
 
-    jest.spyOn(service, 'remove').mockReturnValue(result);
-    expect(controller.remove('abc123')).toEqual(result);
+    jest.spyOn(service, 'remove').mockResolvedValue(result);
+    expect(await controller.remove('abc123')).toEqual(result);
   });
 });

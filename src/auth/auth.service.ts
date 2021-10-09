@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { User } from '../users/interfaces/user.interface';
 import { UsersService } from '../users/users.service';
 
 type UserOrNull = User | null;
@@ -17,10 +17,11 @@ export class AuthService {
     if (user && isMatch) {
       return user;
     }
+
     return null;
   }
 
-  async login(user: { id: string; email: string; }) {
+  async login(user: { id: string; email: string }) {
     const payload = { userId: user.id, userEmail: user.email };
 
     return {

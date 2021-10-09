@@ -37,16 +37,14 @@ describe('AuthService', () => {
   });
 
   it('validateUser', async () => {
-    usersService.users = [
-      {
-        id: 'abc123',
-        email: 'mrdoomy@mrdoomy.xyz',
-        password: 'qwerty',
-        firstName: 'Damien',
-        lastName: 'Chazoule',
-        gender: Gender.Male
-      }
-    ];
+    jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue({
+      id: 'abc123',
+      email: 'mrdoomy@mrdoomy.xyz',
+      password: 'qwerty',
+      firstName: 'Damien',
+      lastName: 'Chazoule',
+      gender: Gender.Male
+    });
 
     const compareMock = jest.fn().mockReturnValue('qwerty');
     (bcrypt.compare as jest.Mock) = compareMock;

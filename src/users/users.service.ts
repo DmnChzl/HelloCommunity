@@ -1,62 +1,55 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './interfaces/user.interface';
-import { generateUuid } from '../utils';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
-  users: User[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  findAll(): User[] {
-    return this.users;
+  async findAll(): Promise<User[]> {
+    return await this.prisma.user.findMany();
   }
 
-  findOne(id: string): User {
-    const user = this.users.find(user => user.id === id);
+  async findOne(id: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
     if (user) return user;
     throw new HttpException('No User Found', HttpStatus.NOT_FOUND);
   }
 
-  findOneByEmail(email: string): User {
-    const user = this.users.find(user => user.email === email);
+  async findOneByEmail(email: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { email } });
     if (user) return user;
     throw new HttpException('No User Found', HttpStatus.NOT_FOUND);
   }
 
-  async create({ password, ...createUserDto }: CreateUserDto): Promise<{ createdId: string }> {
-    const uuid = generateUuid();
+  async create({ password, ...userCreateInput }: Prisma.UserCreateInput): Promise<{ createdId: string }> {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(password, salt);
-    this.users = [
-      ...this.users,
-      {
-        id: uuid,
+
+    const user = await this.prisma.user.create({
+      data: {
         password: hash,
-        ...createUserDto
+        ...userCreateInput
       }
-    ];
-    return { createdId: uuid };
+    });
+
+    return { createdId: user.id };
   }
 
-  update(id: string, updateUserDto: UpdateUserDto): { updatedId: string } {
-    let founded = false;
-    this.users = this.users.map(user => {
-      if (user.id === id) {
-        founded = true;
-        return { ...user, ...updateUserDto };
-      }
-      return user;
+  async update(id: string, userUpdateInput: Prisma.UserUpdateInput): Promise<{ updatedId: string }> {
+    const user = await this.prisma.user.update({
+      data: userUpdateInput,
+      where: { id }
     });
-    if (founded) return { updatedId: id };
+
+    if (user) return { updatedId: user.id };
     throw new HttpException('No User Found', HttpStatus.NOT_FOUND);
   }
 
-  remove(id: string): { removedId: string } {
-    const length = this.users.length;
-    this.users = this.users.filter(user => user.id !== id);
-    if (length !== this.users.length) return { removedId: id };
+  async remove(id: string): Promise<{ removedId: string }> {
+    const user = await this.prisma.user.delete({ where: { id } });
+    if (user) return { removedId: user.id };
     throw new HttpException('No User Found', HttpStatus.NOT_FOUND);
   }
 }
