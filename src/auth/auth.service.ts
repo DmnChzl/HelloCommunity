@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
+import { User } from '@prisma/client';
 
 type UserOrNull = User | null;
 
@@ -21,7 +21,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: { id: string; email: string }) {
+  async login(user: { id: string; email: string; }) {
     const payload = { userId: user.id, userEmail: user.email };
 
     return {

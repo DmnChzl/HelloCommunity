@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { User, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -8,11 +8,25 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(): Promise<User[]> {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({ include: { projects: true } });
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      include: {
+        projects: {
+          select: {
+            project: {
+              select: {
+                title: true,
+                subTitle: true
+              }
+            }
+          }
+        }
+      },
+      where: { id }
+    });
     if (user) return user;
     throw new HttpException('No User Found', HttpStatus.NOT_FOUND);
   }

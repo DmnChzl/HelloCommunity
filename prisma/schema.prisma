@@ -13,10 +13,30 @@ enum Gender {
 }
 
 model User {
-  id        String  @id @default(uuid())
-  email     String  @unique
+  id        String          @id @default(uuid())
+  email     String          @unique
   password  String
   firstName String?
   lastName  String?
   gender    Gender
+  projects  ProjectToUser[]
+}
+
+model Project {
+  id          Int             @id @default(autoincrement())
+  title       String          @unique
+  subTitle    String?
+  description String
+  startDate   DateTime
+  endDate     DateTime?
+  users       ProjectToUser[]
+}
+
+model ProjectToUser {
+  user         User    @relation(fields: [userEmail], references: [email])
+  userEmail    String
+  project      Project @relation(fields: [projectTitle], references: [title])
+  projectTitle String
+
+  @@id([userEmail, projectTitle])
 }
