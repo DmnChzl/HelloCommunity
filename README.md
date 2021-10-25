@@ -1,5 +1,7 @@
 # Hello Community 👋
 
+> Linked to posts published on [dev.to](https://dev.to/mrdoomy/building-a-robust-backend-server-with-nestjs-29bf) and [medium.com](https://link.medium.com/EEdOwMrrDkb)
+
 This is a robust and secure backend application powered by [NestJS](https://nestjs.com) (and **Fastify**), for user management...
 
 ## Process
