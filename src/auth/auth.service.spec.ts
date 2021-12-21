@@ -39,7 +39,7 @@ describe('AuthService', () => {
   it('validateUser', async () => {
     jest.spyOn(usersService, 'findOneByEmail').mockResolvedValue({
       id: 'abc123',
-      email: 'mrdoomy@mrdoomy.xyz',
+      email: 'dmnchzl@pm.me',
       password: 'qwerty',
       firstName: 'Damien',
       lastName: 'Chazoule',
@@ -50,15 +50,15 @@ describe('AuthService', () => {
     (bcrypt.compare as jest.Mock) = compareMock;
 
     const validateUserSpy = jest.spyOn(service, 'validateUser');
-    await service.validateUser('mrdoomy@mrdoomy.xyz', 'qwerty');
-    expect(validateUserSpy).toHaveBeenCalledWith('mrdoomy@mrdoomy.xyz', 'qwerty');
+    await service.validateUser('dmnchzl@pm.me', 'qwerty');
+    expect(validateUserSpy).toHaveBeenCalledWith('dmnchzl@pm.me', 'qwerty');
   });
 
   it('login', () => {
     const loginSpy = jest.spyOn(service, 'login');
     const data = {
       id: 'abc123',
-      email: 'mrdoomy@mrdoomy.xyz'
+      email: 'dmnchzl@pm.me'
     };
     service.login(data);
     expect(loginSpy).toHaveBeenCalledWith(data);

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Hello Community 👋",
   "author": "Damien Chazoule <damien.chazoule@gmail.com>",
-  "repository": "https://github.com/mrdoomy/hellocommunity.git",
+  "repository": "https://github.com/dmnchzl/hellocommunity.git",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

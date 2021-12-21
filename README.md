@@ -1,6 +1,6 @@
 # Hello Community 👋
 
-> Linked to posts published on [dev.to](https://dev.to/mrdoomy/building-a-robust-backend-server-with-nestjs-29bf) and [medium.com](https://link.medium.com/EEdOwMrrDkb)
+> Linked to posts published on [dev.to](https://dev.to/dmnchzl/building-a-robust-backend-server-with-nestjs-29bf) and [medium.com](https://link.medium.com/EEdOwMrrDkb)
 
 This is a robust and secure backend application powered by [NestJS](https://nestjs.com) (and **Fastify**), for user management...
 
@@ -9,7 +9,7 @@ This is a robust and secure backend application powered by [NestJS](https://nest
 Clone the project:
 
 ```
-git clone https://github.com/mrdoomy/hellocommunity.git
+git clone https://github.com/dmnchzl/hellocommunity.git
 ```
 
 Install dependencies:

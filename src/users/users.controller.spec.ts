@@ -27,7 +27,7 @@ describe('UsersController', () => {
     const result = [
       {
         id: 'abc123',
-        email: 'mrdoomy@mrdoomy.xyz',
+        email: 'dmnchzl@pm.me',
         password: 'azerty',
         firstName: 'Damien',
         lastName: 'Chazoule',
@@ -42,7 +42,7 @@ describe('UsersController', () => {
   it('findOne', async () => {
     const result = {
       id: 'abc123',
-      email: 'mrdoomy@mrdoomy.xyz',
+      email: 'dmnchzl@pm.me',
       password: 'azerty',
       firstName: 'Damien',
       lastName: 'Chazoule',
@@ -61,7 +61,7 @@ describe('UsersController', () => {
     jest.spyOn(service, 'create').mockResolvedValue(result);
     expect(
       await controller.create({
-        email: 'mrdoomy@mrdoomy.xyz',
+        email: 'dmnchzl@pm.me',
         password: 'azerty',
         firstName: 'Damien',
         lastName: 'Chazoule',

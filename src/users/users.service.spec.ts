@@ -29,7 +29,7 @@ describe('UsersService', () => {
     jest.spyOn(prisma.user, 'findMany').mockResolvedValue([
       {
         id: 'abc123',
-        email: 'mrdoomy@mrdoomy.xyz',
+        email: 'dmnchzl@pm.me',
         password: 'azerty',
         firstName: 'Damien',
         lastName: 'Chazoule',
@@ -44,7 +44,7 @@ describe('UsersService', () => {
   it('findOne', async () => {
     jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
       id: 'abc123',
-      email: 'mrdoomy@mrdoomy.xyz',
+      email: 'dmnchzl@pm.me',
       password: 'azerty',
       firstName: 'Damien',
       lastName: 'Chazoule',
@@ -58,21 +58,21 @@ describe('UsersService', () => {
   it('findOneByEmail', async () => {
     jest.spyOn(prisma.user, 'findUnique').mockResolvedValue({
       id: 'abc123',
-      email: 'mrdoomy@mrdoomy.xyz',
+      email: 'dmnchzl@pm.me',
       password: 'azerty',
       firstName: 'Damien',
       lastName: 'Chazoule',
       gender: Gender.Male
     });
     const findOneByEmailSpy = jest.spyOn(service, 'findOneByEmail');
-    await service.findOneByEmail('mrdoomy@mrdoomy.xyz');
-    expect(findOneByEmailSpy).toHaveBeenCalledWith('mrdoomy@mrdoomy.xyz');
+    await service.findOneByEmail('dmnchzl@pm.me');
+    expect(findOneByEmailSpy).toHaveBeenCalledWith('dmnchzl@pm.me');
   });
 
   it('create', async () => {
     jest.spyOn(prisma.user, 'create').mockResolvedValue({
       id: 'abc123',
-      email: 'mrdoomy@mrdoomy.xyz',
+      email: 'dmnchzl@pm.me',
       password: 'qwerty',
       firstName: 'Damien',
       lastName: 'Chazoule',
@@ -87,7 +87,7 @@ describe('UsersService', () => {
 
     const createSpy = jest.spyOn(service, 'create');
     const data = {
-      email: 'mrdoomy@mrdoomy.xyz',
+      email: 'dmnchzl@pm.me',
       password: 'azerty',
       firstName: 'Damien',
       lastName: 'Chazoule',
@@ -100,7 +100,7 @@ describe('UsersService', () => {
   it('update', async () => {
     jest.spyOn(prisma.user, 'update').mockResolvedValue({
       id: 'abc123',
-      email: 'mrdoomy@mrdoomy.xyz',
+      email: 'dmnchzl@pm.me',
       password: 'azerty',
       firstName: 'Damien',
       lastName: 'Chazoule',
@@ -117,7 +117,7 @@ describe('UsersService', () => {
   it('remove', async () => {
     jest.spyOn(prisma.user, 'delete').mockResolvedValue({
       id: 'abc123',
-      email: 'mrdoomy@mrdoomy.xyz',
+      email: 'dmnchzl@pm.me',
       password: 'azerty',
       firstName: 'Damien',
       lastName: 'Chazoule',
